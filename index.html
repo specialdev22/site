@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPED DEV | Dashboard</title>
+    <style>
+        :root {
+            --sped-red: #c40000;
+            --sped-blue: #8b9dc3;
+        }
+
+        body {
+            background-color: var(--sped-red);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Thick black outline on text */
+        .outlined-text {
+            color: white;
+            letter-spacing: 4px;
+            text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000,
+                 2px  2px 0 #000;
+        }
+
+        /* --- LEFT SIDEBAR (NAVIGATION) --- */
+        .sidebar-left {
+            width: 300px;
+            background-color: var(--sped-red);
+            border-right: 6px solid white;
+            box-shadow: 6px 0 0px black;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            z-index: 10;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .sidebar-left.collapsed {
+            width: 70px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-family: 'Impact';
+            font-size: 2em;
+            cursor: pointer;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 4px solid white;
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            color: var(--sped-blue);
+        }
+
+        .nav-link {
+            background: none;
+            border: none;
+            border-bottom: 2px solid white;
+            text-align: left;
+            padding: 20px;
+            font-size: 1.5em;
+            font-family: 'Impact';
+            color: white;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: 0.2s;
+            outline: none;
+        }
+
+        .nav-link:hover {
+            background-color: white;
+            color: var(--sped-red);
+            text-shadow: none;
+        }
+        
+        .sidebar-left.collapsed .nav-text {
+            display: none;
+        }
+
+        /* --- CENTER COLUMN (TAB CONTENT) --- */
+        .center-col {
+            flex-grow: 1;
+            padding: 20px 40px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow-y: auto; /* Allows scrolling inside the center area if content gets too tall */
+        }
+
+        .tab-content {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        #tab-forum { display: flex; }
+
+        .header-title {
+            text-align: center;
+            font-size: 4em;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+        }
+
+        .panel {
+            border: 6px solid white;
+            background-color: var(--sped-red);
+            padding: 40px;
+            box-shadow: 8px 8px 0px black;
+            border-radius: 5px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Discord Embed stretches to fill remaining height */
+        .embed-container {
+            flex-grow: 1; 
+            width: 100%;
+            border: 6px solid white;
+            box-shadow: 8px 8px 0px black;
+            background-color: black;
+            margin-bottom: 20px;
+            min-height: 500px;
+        }
+
+        /* --- RIGHT SIDEBAR (DUMBED DOWN STATS) --- */
+        .sidebar-right {
+            width: 250px;
+            background-color: var(--sped-red);
+            border-left: 6px solid white;
+            box-shadow: -6px 0 0px black;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+            overflow-y: auto;
+        }
+
+        .sidebar-right h2 {
+            font-size: 2.2em;
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 4px solid white;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        .dumb-stat {
+            font-size: 2em;
+            margin: 20px 0;
+            text-align: center;
+            width: 100%;
+            line-height: 1.2;
+        }
+        
+        .dumb-stat span {
+            display: block;
+            font-size: 1.8em;
+            color: white;
+        }
+
+        /* --- FORM & IN-DEPTH ANALYTICS STYLING --- */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            font-size: 1.2em;
+            padding: 15px;
+            border: 4px solid black;
+            background-color: black;
+        }
+
+        button[type="submit"] {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 2em;
+            background-color: var(--sped-blue);
+            color: white;
+            padding: 15px;
+            border: 6px solid black;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            transition: transform 0.1s;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            transform: scale(1.02);
+            background-color: white;
+            color: black;
+        }
+
+        .detailed-stat {
+            font-size: 1.5em;
+            margin: 10px 0;
+            border-bottom: 3px solid white;
+            padding-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .detailed-stat span.label {
+            font-size: 0.8em;
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+
+        .detailed-stat span.value {
+            font-size: 1.8em;
+        }
+
+        .video-box {
+            border: 4px solid black;
+            padding: 15px;
+            background-color: var(--sped-blue);
+            color: white;
+            text-shadow: none;
+            margin-top: 15px;
+            margin-bottom: 30px;
+        }
+
+        .video-box h3 {
+   	 margin: 0 0 10px 0;
+    	 font-family: 'Impact';
+    	 font-size: 2em; /* Bumped up the size slightly so the outline pops */
+    	 text-align: center;
+    	 text-transform: uppercase;
+    	 color: white; 
+    	 letter-spacing: 2px;
+    
+   	 /* This adds the thick black outline you wanted */
+    	text-shadow: 
+         -2px -2px 0 #000,  
+          2px -2px 0 #000,
+         -2px  2px 0 #000,
+          2px  2px 0 #000,
+          4px  4px 0 #000;
+}
+
+        .video-stats {
+    	    display: flex;
+    	    justify-content: space-around;
+    	    font-family: 'Arial Black';
+    	    font-size: 2em;
+    	    margin-top: 10px;
+    	    text-shadow: 2px 2px 0 #000; 
+}
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-left" id="leftNav">
+        <button class="toggle-btn outlined-text" onclick="toggleNav()">☰</button>
+        <button class="nav-link outlined-text" onclick="switchTab('tab-forum')">
+            <span class="nav-text">FORUM</span>
+        </button>
+        <button class="nav-link outlined-text" onclick="switchTab('tab-suggest')">
+            <span class="nav-text">SUGGEST VIDEO</span>
+        </button>
+        <button class="nav-link outlined-text" onclick="switchTab('tab-analytics')">
+            <span class="nav-text">CHANNEL ANALYTICS</span>
+        </button>
+        <button class="nav-link outlined-text" onclick="switchTab('tab-contact')">
+            <span class="nav-text">CONTACT INFO</span>
+        </button>
+    </div>
+
+    <div class="center-col">
+
+        <div id="tab-forum" class="tab-content">
+            <h2 class="header-title outlined-text">FORUM</h2>
+            <div class="embed-container">
+                <widgetbot server="1523904437603537047" channel="1543686782661689385" width="100%" height="100%"></widgetbot>
+                <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+            </div>
+        </div>
+
+        <div id="tab-suggest" class="tab-content" style="justify-content: center;">
+            <div class="panel">
+                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">VIDEO SUGGESTION</h2>
+                <form action="https://api.web3forms.com/submit" method="POST">
+                    <input type="hidden" name="access_key" value="6e15ebdc-d414-427d-bd35-c4d25d4c27b3">
+                    <input type="checkbox" name="botcheck" style="display: none;">
+
+                    <div class="form-group">
+                        <label class="outlined-text" for="name">WHO ARE YOU?</label>
+                        <input type="text" id="name" name="name" placeholder="Anonymous or Gamertag" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="outlined-text" for="message">WHAT'S THE IDEA?</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Paste your idea here..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="outlined-text">SEND IT TO ME</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="tab-analytics" class="tab-content">
+            <div class="panel" style="margin-bottom: 40px;">
+                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">Channel Analytics</h2>
+                
+                <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
+                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                        <span class="label">SUBSCRIBERS</span>
+                        <span id="exact-subs" class="value">LOAD...</span>
+                    </div>
+                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                        <span class="label">TOTAL VIEWS</span>
+                        <span id="exact-views" class="value">LOAD...</span>
+                    </div>
+                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                        <span class="label">TOTAL VIDEOS</span>
+                        <span id="exact-videos" class="value">LOAD...</span>
+                    </div>
+                </div>
+
+                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🔥 LATEST DROP</h2>
+                <div class="video-box">
+                    <h3 id="latest-title">Fetching Latest Video...</h3>
+                    <div id="latest-embed"></div>
+                    <div class="video-stats">
+                        <span id="latest-views">Views: ...</span>
+                        <span id="latest-comments">Comments: ...</span>
+                        <span id="latest-likes">Likes: ...</span>
+                    </div>
+                </div>
+
+                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🏆 TOP PERFORMER</h2>
+                <div class="video-box">
+                    <h3>TOP VIDEO </h3>
+                    <iframe width="100%" height="400" src="https://www.youtube.com/embed/svuUZwVlqMs&t=1787s" frameborder="0" allowfullscreen style="border: 4px solid black;"></iframe>
+                </div>
+
+                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">📂 LATEST PLAYLIST</h2>
+                <div class="video-box" style="text-align: center;">
+                    <h3 id="playlist-title">Fetching Playlist...</h3>
+                    <p id="playlist-count" style="font-family: 'Arial Black';">Video Count: ...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-contact" class="tab-content" style="justify-content: center;">
+            <div class="panel">
+                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">CONTACT</h2>
+                <p class="outlined-text" style="font-size: 1.8em; text-align: center; line-height: 1.5;">
+                    For business inquiries, collaborations, or direct communication, DM me on the Discord server or reach out to the business email listed on my official YouTube About page.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="sidebar-right">
+        <h2 class="outlined-text">STATS</h2>
+        
+        <div class="dumb-stat outlined-text">
+            SUBS
+            <span id="dumb-subs" class="outlined-text">...</span>
+        </div>
+        
+        <div class="dumb-stat outlined-text">
+            VIEWS
+            <span id="dumb-views" class="outlined-text">...</span>
+        </div>
+        
+        <div class="dumb-stat outlined-text">
+            VIDS
+            <span id="dumb-videos" class="outlined-text">...</span>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching Engine
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(tabId).style.display = 'flex';
+        }
+
+        // Sidebar Toggle
+        function toggleNav() {
+            document.getElementById('leftNav').classList.toggle('collapsed');
+        }
+
+        // YouTube API Fetch Engine
+        const API_KEY = 'AIzaSyAJBEfip9OrmF9ExIyvipjOsN9q5p3fBl8';
+        const CHANNEL_ID = 'UCI4N7cSpkObmM3Jsy5L-XtA'; 
+        
+        async function fetchAllStats() {
+            try {
+                // 1. Fetch Base Channel Stats
+                const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`;
+                const channelRes = await fetch(channelUrl);
+                const channelData = await channelRes.json();
+                
+                if (channelData.items && channelData.items.length > 0) {
+                    const stats = channelData.items[0].statistics;
+                    const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+                    
+                    // Fill numbers
+                    document.getElementById('exact-subs').innerText = Number(stats.subscriberCount).toLocaleString();
+                    document.getElementById('exact-views').innerText = Number(stats.viewCount).toLocaleString();
+                    document.getElementById('exact-videos').innerText = Number(stats.videoCount).toLocaleString();
+
+                    document.getElementById('dumb-subs').innerText = abbreviateNumber(stats.subscriberCount);
+                    document.getElementById('dumb-views').innerText = abbreviateNumber(stats.viewCount);
+                    document.getElementById('dumb-videos').innerText = abbreviateNumber(stats.videoCount);
+
+                    // 2. Fetch Latest Video from Uploads Playlist
+                    const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=1&key=${API_KEY}`;
+                    const playlistRes = await fetch(playlistUrl);
+                    const playlistData = await playlistRes.json();
+                    
+                    if(playlistData.items && playlistData.items.length > 0) {
+                        const latestVideoId = playlistData.items[0].snippet.resourceId.videoId;
+                        const latestTitle = playlistData.items[0].snippet.title;
+                        
+                        document.getElementById('latest-title').innerText = latestTitle;
+                        document.getElementById('latest-embed').innerHTML = `
+    <iframe 
+        width="100%" 
+        height="400" 
+        src="https://www.youtube-nocookie.com/embed/${latestVideoId}" 
+        title="Latest Video"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen 
+        style="border: 4px solid black;">
+    </iframe>`;
+                        
+                        // 3. Fetch specific stats (Views, Likes, Comments) for that Latest Video
+                        const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${latestVideoId}&key=${API_KEY}`;
+                        const videoRes = await fetch(videoUrl);
+                        const videoData = await videoRes.json();
+                        
+                        if(videoData.items && videoData.items.length > 0) {
+                            const vStats = videoData.items[0].statistics;
+                            document.getElementById('latest-views').innerText = `Views: ${Number(vStats.viewCount).toLocaleString()}`;
+                            document.getElementById('latest-comments').innerText = `Comments: ${Number(vStats.commentCount).toLocaleString()}`;
+                            document.getElementById('latest-likes').innerText = `Likes: ${Number(vStats.likeCount).toLocaleString()}`;
+                        }
+                    }
+
+                    // 4. Fetch Top/Latest Channel Playlist
+                    const playUrl = `https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=${CHANNEL_ID}&maxResults=1&key=${API_KEY}`;
+                    const playRes = await fetch(playUrl);
+                    const playData = await playRes.json();
+
+                    if(playData.items && playData.items.length > 0) {
+                        document.getElementById('playlist-title').innerText = playData.items[0].snippet.title;
+                        document.getElementById('playlist-count').innerText = `Video Count: ${playData.items[0].contentDetails.itemCount}`;
+                    } else {
+                        document.getElementById('playlist-title').innerText = "No Public Playlists Found";
+                        document.getElementById('playlist-count').innerText = "";
+                    }
+                }
+            } catch (error) {
+                console.error("Fetch Error: ", error);
+            }
+        }
+
+        // Number Formatting Engine (e.g. 150000 -> 150K)
+        function abbreviateNumber(numStr) {
+            const num = parseInt(numStr, 10);
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        fetchAllStats();
+    </script>
+
+</body>
+</html>
