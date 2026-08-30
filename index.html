@@ -6,7 +6,6 @@
     <title>SPED DEV | Dashboard</title>
     <style>
         :root {
-            /* Updated to your exact red hex code */
             --sped-red: #e33d3d; 
             --sped-blue: #8b9dc3;
         }
@@ -41,7 +40,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Thick black outline on text */
         .outlined-text {
             color: white;
             letter-spacing: 4px;
@@ -110,7 +108,7 @@
             background-color: white;
             color: var(--sped-red);
             text-shadow: none;
-            padding-left: 30px; /* Slight slide to the right on hover */
+            padding-left: 30px; 
         }
         
         .sidebar-left.collapsed .nav-text {
@@ -133,7 +131,6 @@
             flex-direction: column;
             height: 100%;
             width: 100%;
-            /* Bouncy pop-in animation when a tab is clicked */
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
@@ -144,10 +141,10 @@
             font-size: 4em;
             margin: 0 0 20px 0;
             text-transform: uppercase;
-            /* Idle float animation */
             animation: float 4s ease-in-out infinite;
         }
 
+        /* 3D Tilt Element Base Settings */
         .panel {
             border: 6px solid white;
             background-color: var(--sped-red);
@@ -157,6 +154,9 @@
             max-width: 800px;
             margin: 0 auto;
             width: 100%;
+            /* Will-change optimizes rendering for the JS tilt effect */
+            will-change: transform;
+            transition: box-shadow 0.2s ease, transform 0.1s ease-out;
         }
 
         .embed-container {
@@ -190,7 +190,6 @@
             border-bottom: 4px solid white;
             padding-bottom: 10px;
             width: 100%;
-            /* Idle float animation */
             animation: float 3s ease-in-out infinite alternate;
         }
 
@@ -200,7 +199,6 @@
             text-align: center;
             width: 100%;
             line-height: 1.2;
-            /* Idle pulse animation */
             animation: pulse 2.5s infinite ease-in-out;
         }
         
@@ -249,14 +247,13 @@
             text-transform: uppercase;
             width: 100%;
             margin-top: 10px;
-            /* Idle pulse so the button looks alive */
             animation: pulse 2s infinite;
         }
 
         button[type="submit"]:hover {
             background-color: white;
             color: black;
-            animation: none; /* Stop pulsing when hovered */
+            animation: none; 
             transform: scale(1.02);
         }
 
@@ -280,6 +277,7 @@
             font-size: 1.8em;
         }
 
+        /* 3D Tilt Element Base Settings */
         .video-box {
             border: 4px solid black;
             padding: 15px;
@@ -288,11 +286,8 @@
             text-shadow: none;
             margin-top: 15px;
             margin-bottom: 30px;
-            transition: transform 0.3s ease;
-        }
-        
-        .video-box:hover {
-            transform: scale(1.02);
+            will-change: transform;
+            transition: box-shadow 0.2s ease, transform 0.1s ease-out;
         }
 
         .video-box h3 {
@@ -323,7 +318,6 @@
 </head>
 <body>
 
-    <!-- LEFT SIDEBAR -->
     <div class="sidebar-left" id="leftNav">
         <button class="toggle-btn outlined-text" onclick="toggleNav()">☰</button>
         <button class="nav-link outlined-text" onclick="switchTab('tab-forum')">
@@ -340,10 +334,8 @@
         </button>
     </div>
 
-    <!-- CENTER COLUMN -->
     <div class="center-col">
 
-        <!-- TAB 1: FORUM -->
         <div id="tab-forum" class="tab-content">
             <h2 class="header-title outlined-text">FORUM</h2>
             <div class="embed-container">
@@ -352,9 +344,8 @@
             </div>
         </div>
 
-        <!-- TAB 2: SUGGEST VIDEO -->
         <div id="tab-suggest" class="tab-content" style="justify-content: center;">
-            <div class="panel">
+            <div class="panel tilt-card">
                 <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">VIDEO SUGGESTION</h2>
                 <form action="https://api.web3forms.com/submit" method="POST">
                     <input type="hidden" name="access_key" value="6e15ebdc-d414-427d-bd35-c4d25d4c27b3">
@@ -375,12 +366,10 @@
             </div>
         </div>
 
-        <!-- TAB 3: IN-DEPTH ANALYTICS -->
         <div id="tab-analytics" class="tab-content">
-            <div class="panel" style="margin-bottom: 40px;">
+            <div class="panel tilt-card" style="margin-bottom: 40px;">
                 <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">IN-DEPTH ANALYTICS</h2>
                 
-                <!-- Base Channel Stats -->
                 <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
                     <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
                         <span class="label">SUBSCRIBERS</span>
@@ -396,9 +385,8 @@
                     </div>
                 </div>
 
-                <!-- Latest Video -->
                 <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🔥 LATEST DROP</h2>
-                <div class="video-box">
+                <div class="video-box tilt-card">
                     <h3 id="latest-title">Fetching Latest Video...</h3>
                     <div id="latest-embed"></div>
                     <div class="video-stats">
@@ -408,26 +396,22 @@
                     </div>
                 </div>
 
-                <!-- Best Performing Video -->
                 <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🏆 TOP PERFORMER</h2>
-                <div class="video-box">
+                <div class="video-box tilt-card">
                     <h3>TOP VIDEO</h3>
-                    <!-- REPLACE with your best video's ID -->
                     <iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/YOUR_TOP_VIDEO_ID" title="Top Performer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border: 4px solid black;"></iframe>
                 </div>
 
-                <!-- Top Playlist -->
                 <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">📂 LATEST PLAYLIST</h2>
-                <div class="video-box" style="text-align: center;">
+                <div class="video-box tilt-card" style="text-align: center;">
                     <h3 id="playlist-title">Fetching Playlist...</h3>
                     <p id="playlist-count" style="font-family: 'Arial Black'; font-size: 1.5em;">Video Count: ...</p>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 4: CONTACT INFO -->
         <div id="tab-contact" class="tab-content" style="justify-content: center;">
-            <div class="panel">
+            <div class="panel tilt-card">
                 <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">CONTACT</h2>
                 <p class="outlined-text" style="font-size: 1.8em; text-align: center; line-height: 1.5;">
                     For business inquiries, collaborations, or direct communication, DM me on the Discord server or reach out to the business email listed on my official YouTube About page.
@@ -437,7 +421,6 @@
 
     </div>
 
-    <!-- RIGHT SIDEBAR -->
     <div class="sidebar-right">
         <h2 class="outlined-text">STATS</h2>
         
@@ -457,16 +440,43 @@
         </div>
     </div>
 
-    <!-- Logic Scripts -->
     <script>
+        // --- 3D TILT ENGINE ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    // Calculate mouse position relative to center
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // Rotate slightly based on distance from center (max 4 degrees)
+                    const rotateX = ((y - centerY) / centerY) * -4;
+                    const rotateY = ((x - centerX) / centerX) * 4;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    card.style.boxShadow = `${-rotateY * 2}px ${rotateX * 2 + 8}px 0px black`; // Dynamic shadow
+                });
+                
+                // Snap back to flat when mouse leaves
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    card.style.boxShadow = `8px 8px 0px black`; // Reset shadow
+                });
+            });
+        });
+
         // Tab Switching Engine
         function switchTab(tabId) {
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => {
                 tab.style.display = 'none';
-                // Removing and re-adding the animation so it replays every time you switch
                 tab.style.animation = 'none';
-                tab.offsetHeight; /* Trigger reflow to restart animation */
+                tab.offsetHeight; 
                 tab.style.animation = null; 
             });
             document.getElementById(tabId).style.display = 'flex';
@@ -483,7 +493,6 @@
         
         async function fetchAllStats() {
             try {
-                // 1. Fetch Base Channel Stats
                 const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`;
                 const channelRes = await fetch(channelUrl);
                 const channelData = await channelRes.json();
@@ -500,7 +509,6 @@
                     document.getElementById('dumb-views').innerText = abbreviateNumber(stats.viewCount);
                     document.getElementById('dumb-videos').innerText = abbreviateNumber(stats.videoCount);
 
-                    // 2. Fetch Latest Video from Uploads Playlist
                     const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=1&key=${API_KEY}`;
                     const playlistRes = await fetch(playlistUrl);
                     const playlistData = await playlistRes.json();
@@ -523,7 +531,6 @@
                                 style="border: 4px solid black;">
                             </iframe>`;
                         
-                        // 3. Fetch specific stats (Views, Likes, Comments)
                         const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${latestVideoId}&key=${API_KEY}`;
                         const videoRes = await fetch(videoUrl);
                         const videoData = await videoRes.json();
@@ -536,7 +543,6 @@
                         }
                     }
 
-                    // 4. Fetch Top/Latest Channel Playlist
                     const playUrl = `https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=${CHANNEL_ID}&maxResults=1&key=${API_KEY}`;
                     const playRes = await fetch(playUrl);
                     const playData = await playRes.json();
