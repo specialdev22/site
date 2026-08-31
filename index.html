@@ -14,7 +14,7 @@
             background-color: var(--sped-red);
             font-family: 'Impact', 'Arial Black', sans-serif;
             margin: 0;
-            padding: 0;
+            paddincg: 0;
             color: white;
             /* CHANGED: Made the body scrollable for the footer */
             display: flex;
@@ -23,7 +23,7 @@
             overflow-x: hidden;
             box-sizing: border-box;
         }
-
+        
         /* --- SCROLLING TICKER TAPE --- */
         .announcement-bar {
             background-color: black;
@@ -227,49 +227,6 @@
             min-height: 600px; /* Increased slightly since page can scroll */
         }
 
-        /* --- RIGHT SIDEBAR (DUMBED DOWN STATS) --- */
-        .sidebar-right {
-            width: 250px;
-            background-color: var(--sped-red);
-            border-left: 6px solid white;
-            box-shadow: -6px 0 0px black;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 5;
-            /* CHANGED: Made sticky to stay visible when scrolling down */
-            position: sticky;
-            top: 115px;
-            height: calc(100vh - 115px);
-            overflow-y: auto;
-        }
-
-        .sidebar-right h2 {
-            font-size: 2.2em;
-            text-align: center;
-            margin-top: 0;
-            border-bottom: 4px solid white;
-            padding-bottom: 10px;
-            width: 100%;
-            animation: float 3s ease-in-out infinite alternate;
-        }
-
-        .dumb-stat {
-            font-size: 2em;
-            margin: 20px 0;
-            text-align: center;
-            width: 100%;
-            line-height: 1.2;
-            animation: pulse 2.5s infinite ease-in-out;
-        }
-        
-        .dumb-stat span {
-            display: block;
-            font-size: 1.8em;
-            color: white;
-        }
-
         /* --- FORM & IN-DEPTH ANALYTICS STYLING --- */
         .form-group {
             display: flex;
@@ -470,7 +427,7 @@
         .chat-window {
             position: fixed;
             bottom: 140px;
-            right: 280px;
+            right: 90px;
             width: 320px;
             background-color: white;
             border: 6px solid black;
@@ -675,27 +632,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- RIGHT SIDEBAR -->
-        <div class="sidebar-right">
-            <h2 class="outlined-text">STATS</h2>
-            
-            <div class="dumb-stat outlined-text">
-                SUBS
-                <span id="dumb-subs" class="outlined-text">...</span>
-            </div>
-            
-            <div class="dumb-stat outlined-text">
-                VIEWS
-                <span id="dumb-views" class="outlined-text">...</span>
-            </div>
-            
-            <div class="dumb-stat outlined-text">
-                VIDS
-                <span id="dumb-videos" class="outlined-text">...</span>
-            </div>
-        </div>
-    </div>
 
     <!-- FULL WIDTH FOOTER -->
     <footer class="site-footer">
