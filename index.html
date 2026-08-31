@@ -6,7 +6,6 @@
     <title>Special Dev Dashboard</title>
     <style>
         :root {
-            /* Updated to your exact red hex code */
             --sped-red: #e33d3d; 
             --sped-blue: #8b9dc3;
         }
@@ -23,11 +22,10 @@
             box-sizing: border-box;
         }
 
-        /* --- TOP NAVIGATION BARS --- */
+        /* --- SCROLLING TICKER TAPE --- */
         .announcement-bar {
             background-color: black;
             color: white;
-            text-align: center;
             padding: 8px 0;
             font-family: 'Arial Black', sans-serif;
             font-size: 0.9em;
@@ -38,29 +36,36 @@
             width: 100%;
             z-index: 1000;
             border-bottom: 2px solid white;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
-        .smart-header {
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* --- STATIC HEADER --- */
+        .static-header {
             background-color: var(--sped-red);
             border-bottom: 6px solid white;
             box-shadow: 0 4px 0px black;
             height: 80px;
             position: fixed;
-            top: 35px; /* Sits exactly below the announcement bar */
+            top: 35px; /* Sits below the ticker */
             width: 100%;
             z-index: 999;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* This class is added via JS when scrolling down */
-        .smart-header.hidden {
-            transform: translateY(-110%);
-        }
-
-        /* Replace the src with your actual image file */
         .header-logo {
             height: 60px;
             object-fit: contain;
@@ -70,12 +75,11 @@
         .dashboard-layout {
             display: flex;
             height: 100vh;
-            padding-top: 115px; /* Pushes content below the top bars */
+            padding-top: 115px; 
             box-sizing: border-box;
             width: 100%;
         }
 
-        /* --- ANIMATION KEYFRAMES --- */
         @keyframes popIn {
             0% { opacity: 0; transform: scale(0.95) translateY(15px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
@@ -93,7 +97,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Thick black outline on text */
         .outlined-text {
             color: white;
             letter-spacing: 4px;
@@ -162,7 +165,7 @@
             background-color: white;
             color: var(--sped-red);
             text-shadow: none;
-            padding-left: 30px; /* Slight slide to the right on hover */
+            padding-left: 30px; 
         }
         
         .sidebar-left.collapsed .nav-text {
@@ -175,7 +178,7 @@
             padding: 20px 40px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
             box-sizing: border-box;
             overflow-y: auto;
         }
@@ -185,7 +188,6 @@
             flex-direction: column;
             height: 100%;
             width: 100%;
-            /* Bouncy pop-in animation when a tab is clicked */
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
@@ -196,7 +198,6 @@
             font-size: 4em;
             margin: 0 0 20px 0;
             text-transform: uppercase;
-            /* Idle float animation */
             animation: float 4s ease-in-out infinite;
         }
 
@@ -242,7 +243,6 @@
             border-bottom: 4px solid white;
             padding-bottom: 10px;
             width: 100%;
-            /* Idle float animation */
             animation: float 3s ease-in-out infinite alternate;
         }
 
@@ -252,7 +252,6 @@
             text-align: center;
             width: 100%;
             line-height: 1.2;
-            /* Idle pulse animation */
             animation: pulse 2.5s infinite ease-in-out;
         }
         
@@ -301,14 +300,13 @@
             text-transform: uppercase;
             width: 100%;
             margin-top: 10px;
-            /* Idle pulse so the button looks alive */
             animation: pulse 2s infinite;
         }
 
         button[type="submit"]:hover {
             background-color: white;
             color: black;
-            animation: none; /* Stop pulsing when hovered */
+            animation: none;
             transform: scale(1.02);
         }
 
@@ -371,133 +369,236 @@
             margin-top: 10px;
             text-shadow: 2px 2px 0 #000;
         }
+
+        /* --- BABY MASCOT CHATBOT STYLES --- */
+        .mascot-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 280px; 
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.2s;
+            animation: float 3s infinite;
+            filter: drop-shadow(4px 4px 0px black);
+        }
+
+        .mascot-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .mascot-btn img {
+            width: 100px;
+            height: auto;
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 140px;
+            right: 280px;
+            width: 320px;
+            background-color: white;
+            border: 6px solid black;
+            box-shadow: 8px 8px 0px black;
+            z-index: 1001;
+            display: none; 
+            flex-direction: column;
+            color: black;
+            font-family: 'Arial Black', sans-serif;
+            border-radius: 5px;
+        }
+
+        .chat-header {
+            background-color: var(--sped-blue);
+            color: white;
+            padding: 10px;
+            font-family: 'Impact';
+            font-size: 1.5em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid black;
+        }
+
+        .chat-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-family: 'Impact';
+            font-size: 1em;
+            cursor: pointer;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .chat-body {
+            height: 250px;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .msg {
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid black;
+            font-size: 0.9em;
+            max-width: 80%;
+        }
+
+        .bot-msg {
+            background-color: var(--sped-blue);
+            color: white;
+            align-self: flex-start;
+        }
+
+        .user-msg {
+            background-color: var(--sped-red);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .chat-options {
+            padding: 10px;
+            background-color: white;
+            border-top: 4px solid black;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .chat-options button {
+            background-color: black;
+            color: white;
+            font-family: 'Impact';
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .chat-options button:hover {
+            background-color: var(--sped-red);
+        }
     </style>
 </head>
 <body>
 
-<!-- VERY TOP BLACK ANNOUNCEMENT BAR -->
+    <!-- SCROLLING TICKER TAPE -->
     <div class="announcement-bar">
-        OFFICIAL SPED DEV DASHBOARD
+        <div class="marquee-text">OFFICIAL SPED DEV DASHBOARD &nbsp;&nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp;&nbsp; JOIN THE DISCORD &nbsp;&nbsp;&nbsp;&nbsp; /// &nbsp;&nbsp;&nbsp;&nbsp; SUBMIT VIDEO IDEAS</div>
     </div>
 
-    <!-- SMART SCROLLING HEADER -->
-    <header class="smart-header" id="smartHeader">
-        <!-- Replace 'YOUR_LOGO.png' with the actual file name of your custom font image -->
+    <!-- STATIC HEADER -->
+    <header class="static-header">
         <img src="sped dev.png" alt="SPED DEV" class="header-logo">
     </header>
     
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar-left" id="leftNav">
-        <button class="toggle-btn outlined-text" onclick="toggleNav()">☰</button>
-        <button class="nav-link outlined-text" onclick="switchTab('tab-forum')">
-            <span class="nav-text">💬 FORUM</span>
-        </button>
-        <button class="nav-link outlined-text" onclick="switchTab('tab-suggest')">
-            <span class="nav-text">📝 SUGGEST VIDEO</span>
-        </button>
-        <button class="nav-link outlined-text" onclick="switchTab('tab-analytics')">
-            <span class="nav-text">📊 CHANNEL ANALYTICS</span>
-        </button>
-        <button class="nav-link outlined-text" onclick="switchTab('tab-contact')">
-            <span class="nav-text">📧 CONTACT INFO</span>
-        </button>
-    </div>
-
-    <!-- CENTER COLUMN -->
-    <div class="center-col">
-
-        <!-- TAB 1: FORUM -->
-        <div id="tab-forum" class="tab-content">
-            <h2 class="header-title outlined-text">FORUM</h2>
-            <div class="embed-container">
-              <widgetbot server="1523904437603537047" channel="1543751555335848085" width="100%" height="100%"></widgetbot>
-                <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
-            </div>
+    <div class="dashboard-layout">
+        <!-- LEFT SIDEBAR -->
+        <div class="sidebar-left" id="leftNav">
+            <button class="toggle-btn outlined-text" onclick="toggleNav()">☰</button>
+            <button class="nav-link outlined-text" onclick="switchTab('tab-forum')">
+                <span class="nav-text">💬 FORUM</span>
+            </button>
+            <button class="nav-link outlined-text" onclick="switchTab('tab-suggest')">
+                <span class="nav-text">📝 SUGGEST VIDEO</span>
+            </button>
+            <button class="nav-link outlined-text" onclick="switchTab('tab-analytics')">
+                <span class="nav-text">📊 CHANNEL ANALYTICS</span>
+            </button>
+            <button class="nav-link outlined-text" onclick="switchTab('tab-contact')">
+                <span class="nav-text">📧 CONTACT INFO</span>
+            </button>
         </div>
 
-        <!-- TAB 2: SUGGEST VIDEO -->
-        <div id="tab-suggest" class="tab-content" style="justify-content: center;">
-            <div class="panel">
-                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">VIDEO SUGGESTION</h2>
-                <form action="https://api.web3forms.com/submit" method="POST">
-                    <input type="hidden" name="access_key" value="6e15ebdc-d414-427d-bd35-c4d25d4c27b3">
-                    <input type="checkbox" name="botcheck" style="display: none;">
-
-                    <div class="form-group">
-                        <label class="outlined-text" for="name">WHO ARE YOU?</label>
-                        <input type="text" id="name" name="name" placeholder="Anonymous or Gamertag" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="outlined-text" for="message">WHAT'S THE IDEA?</label>
-                        <textarea id="message" name="message" rows="6" placeholder="Paste your idea here..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="outlined-text">SEND IT TO ME</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- TAB 3: IN-DEPTH ANALYTICS -->
-        <div id="tab-analytics" class="tab-content">
-            <div class="panel" style="margin-bottom: 40px;">
-                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">IN-DEPTH ANALYTICS</h2>
-                
-                <!-- Base Channel Stats -->
-                <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
-                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
-                        <span class="label">SUBSCRIBERS</span>
-                        <span id="exact-subs" class="value">LOAD...</span>
-                    </div>
-                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
-                        <span class="label">TOTAL VIEWS</span>
-                        <span id="exact-views" class="value">LOAD...</span>
-                    </div>
-                    <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
-                        <span class="label">TOTAL VIDEOS</span>
-                        <span id="exact-videos" class="value">LOAD...</span>
-                    </div>
-                </div>
-
-                <!-- Latest Video -->
-                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🔥 LATEST DROP</h2>
-                <div class="video-box">
-                    <h3 id="latest-title">Fetching Latest Video...</h3>
-                    <div id="latest-embed"></div>
-                    <div class="video-stats">
-                        <span id="latest-views">Views: ...</span>
-                        <span id="latest-comments">Comments: ...</span>
-                        <span id="latest-likes">Likes: ...</span>
-                    </div>
-                </div>
-
-                <!-- Best Performing Video -->
-                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🏆 TOP PERFORMER</h2>
-                <div class="video-box">
-                    <h3>TOP VIDEO</h3>
-                    <!-- REPLACE with your best video's ID -->
-                    <iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/YOUR_TOP_VIDEO_ID" title="Top Performer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border: 4px solid black;"></iframe>
-                </div>
-
-                <!-- Top Playlist -->
-                <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">📂 LATEST PLAYLIST</h2>
-                <div class="video-box" style="text-align: center;">
-                    <h3 id="playlist-title">Fetching Playlist...</h3>
-                    <p id="playlist-count" style="font-family: 'Arial Black'; font-size: 1.5em;">Video Count: ...</p>
+        <!-- CENTER COLUMN -->
+        <div class="center-col" id="scrollArea">
+            <!-- TAB 1: FORUM -->
+            <div id="tab-forum" class="tab-content">
+                <h2 class="header-title outlined-text">FORUM</h2>
+                <div class="embed-container">
+                  <widgetbot server="1523904437603537047" channel="1543751555335848085" width="100%" height="100%"></widgetbot>
+                    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
                 </div>
             </div>
-        </div>
 
-        <!-- TAB 4: CONTACT INFO -->
-        <div id="tab-contact" class="tab-content" style="justify-content: center;">
-            <div class="panel">
-                <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">CONTACT</h2>
-                <p class="outlined-text" style="font-size: 1.8em; text-align: center; line-height: 1.5;">
-                    For business inquiries, collaborations, or direct communication, DM me on the Discord server or reach out to the business email listed on my official YouTube About page.
-                </p>
+            <!-- TAB 2: SUGGEST VIDEO -->
+            <div id="tab-suggest" class="tab-content" style="justify-content: center;">
+                <div class="panel">
+                    <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">VIDEO SUGGESTION</h2>
+                    <form action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="6e15ebdc-d414-427d-bd35-c4d25d4c27b3">
+                        <input type="checkbox" name="botcheck" style="display: none;">
+                        <div class="form-group">
+                            <label class="outlined-text" for="name">WHO ARE YOU?</label>
+                            <input type="text" id="name" name="name" placeholder="Anonymous or Gamertag" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="outlined-text" for="message">WHAT'S THE IDEA?</label>
+                            <textarea id="message" name="message" rows="6" placeholder="Paste your idea here..." required></textarea>
+                        </div>
+                        <button type="submit" class="outlined-text">SEND IT TO ME</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 3: IN-DEPTH ANALYTICS -->
+            <div id="tab-analytics" class="tab-content">
+                <div class="panel" style="margin-bottom: 40px;">
+                    <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">IN-DEPTH ANALYTICS</h2>
+                    <div style="display: flex; justify-content: space-between; gap: 15px; margin-bottom: 30px;">
+                        <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                            <span class="label">SUBSCRIBERS</span>
+                            <span id="exact-subs" class="value">LOAD...</span>
+                        </div>
+                        <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                            <span class="label">TOTAL VIEWS</span>
+                            <span id="exact-views" class="value">LOAD...</span>
+                        </div>
+                        <div class="detailed-stat outlined-text" style="flex: 1; border: 4px solid white;">
+                            <span class="label">TOTAL VIDEOS</span>
+                            <span id="exact-videos" class="value">LOAD...</span>
+                        </div>
+                    </div>
+
+                    <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🔥 LATEST DROP</h2>
+                    <div class="video-box">
+                        <h3 id="latest-title">Fetching Latest Video...</h3>
+                        <div id="latest-embed"></div>
+                        <div class="video-stats">
+                            <span id="latest-views">Views: ...</span>
+                            <span id="latest-comments">Comments: ...</span>
+                            <span id="latest-likes">Likes: ...</span>
+                        </div>
+                    </div>
+
+                    <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">🏆 TOP PERFORMER</h2>
+                    <div class="video-box">
+                        <h3>TOP VIDEO</h3>
+                        <iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/YOUR_TOP_VIDEO_ID" title="Top Performer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border: 4px solid black;"></iframe>
+                    </div>
+
+                    <h2 class="outlined-text" style="text-align: center; font-size: 2em; margin-bottom: 0;">📂 LATEST PLAYLIST</h2>
+                    <div class="video-box" style="text-align: center;">
+                        <h3 id="playlist-title">Fetching Playlist...</h3>
+                        <p id="playlist-count" style="font-family: 'Arial Black'; font-size: 1.5em;">Video Count: ...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CONTACT INFO -->
+            <div id="tab-contact" class="tab-content" style="justify-content: center;">
+                <div class="panel">
+                    <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">CONTACT</h2>
+                    <p class="outlined-text" style="font-size: 1.8em; text-align: center; line-height: 1.5;">
+                        For business inquiries, collaborations, or direct communication, DM me on the Discord server or reach out to the business email listed on my official YouTube About page.
+                    </p>
+                </div>
             </div>
         </div>
-
     </div>
 
     <!-- RIGHT SIDEBAR -->
@@ -520,53 +621,100 @@
         </div>
     </div>
 
+    <!-- BABY MASCOT FLOATING BUTTON -->
+    <div class="mascot-btn" onclick="toggleChat()">
+        <img src="baby_mascot.png" alt="Baby Mascot">
+    </div>
+
+    <!-- MASCOT CHAT WINDOW -->
+    <div class="chat-window" id="chatbotWindow">
+        <div class="chat-header">
+            SPED DEV SYSTEM
+            <button onclick="toggleChat()">X</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="msg bot-msg">Yo. What do you want?</div>
+        </div>
+        <div class="chat-options">
+            <button onclick="askQuestion(1)">When is the next video?</button>
+            <button onclick="askQuestion(2)">Where can I play your Roblox game?</button>
+            <button onclick="askQuestion(3)">Who drew you?</button>
+        </div>
+    </div>
+
     <!-- Logic Scripts -->
     <script>
+        // --- CHATBOT ENGINE ---
+        function toggleChat() {
+            const chat = document.getElementById('chatbotWindow');
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
+        }
 
-const scrollArea = document.getElementById('scrollArea');
-        const smartHeader = document.getElementById('smartHeader');
-        let lastScrollY = scrollArea.scrollTop;
+        function askQuestion(id) {
+            const chatBody = document.getElementById('chatBody');
+            let q = "";
+            let a = "";
 
-        scrollArea.addEventListener('scroll', () => {
-            const currentScrollY = scrollArea.scrollTop;
-            
-            if (currentScrollY > lastScrollY && currentScrollY > 50) {
-                // User is scrolling down, hide the header
-                smartHeader.classList.add('hidden');
-            } else {
-                // User is scrolling up, show the header
-                smartHeader.classList.remove('hidden');
+            if(id === 1) {
+                q = "When is the next video dropping?";
+                a = "Whenever I damn well finish editing it. Stop rushing me.";
+            } else if(id === 2) {
+                q = "Where can I play your Roblox game?";
+                a = "I got about 3 games I'm working on, and where else do you think?.";
+            } else if(id === 3) {
+                q = "Who drew you?";
+                a = "Credit goes to @contuty. They brought this masterpiece to life.";
             }
-            lastScrollY = currentScrollY;
-        });
-        
-        // Tab Switching Engine
+
+            chatBody.innerHTML += `<div class="msg user-msg">${q}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            setTimeout(() => {
+                chatBody.innerHTML += `<div class="msg bot-msg">${a}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 600);
+        }
+
+        // --- TAB & NAV ENGINE ---
         function switchTab(tabId) {
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => {
                 tab.style.display = 'none';
-                // Removing and re-adding the animation so it replays every time you switch
                 tab.style.animation = 'none';
-                tab.offsetHeight; /* Trigger reflow to restart animation */
+                tab.offsetHeight; 
                 tab.style.animation = null; 
             });
             document.getElementById(tabId).style.display = 'flex';
         }
 
-        // Sidebar Toggle
         function toggleNav() {
             document.getElementById('leftNav').classList.toggle('collapsed');
         }
 
-        // YouTube API Fetch Engine
+        // --- YOUTUBE API ENGINE ---
         const API_KEY = 'AIzaSyAJBEfip9OrmF9ExIyvipjOsN9q5p3fBl8';
         const CHANNEL_ID = 'UCI4N7cSpkObmM3Jsy5L-XtA'; 
         
         async function fetchAllStats() {
             try {
-                // 1. Fetch Base Channel Stats
                 const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`;
                 const channelRes = await fetch(channelUrl);
+                
+                // Hard Error Catching to show EXACTLY why Google blocks it
+                if (!channelRes.ok) {
+                    const errText = `ERR ${channelRes.status}`;
+                    console.error("HTTP Fetch Error:", channelRes.status, channelRes.statusText);
+                    document.getElementById('exact-subs').innerText = errText;
+                    document.getElementById('exact-views').innerText = errText;
+                    document.getElementById('exact-videos').innerText = errText;
+                    document.getElementById('dumb-subs').innerText = "ERR";
+                    document.getElementById('dumb-views').innerText = "ERR";
+                    document.getElementById('dumb-videos').innerText = "ERR";
+                    document.getElementById('latest-title').innerText = "API Blocked / Not Enabled";
+                    document.getElementById('playlist-title').innerText = "API Blocked";
+                    return; 
+                }
+
                 const channelData = await channelRes.json();
                 
                 if (channelData.items && channelData.items.length > 0) {
@@ -581,57 +729,60 @@ const scrollArea = document.getElementById('scrollArea');
                     document.getElementById('dumb-views').innerText = abbreviateNumber(stats.viewCount);
                     document.getElementById('dumb-videos').innerText = abbreviateNumber(stats.videoCount);
 
-                    // 2. Fetch Latest Video from Uploads Playlist
                     const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsId}&maxResults=1&key=${API_KEY}`;
                     const playlistRes = await fetch(playlistUrl);
-                    const playlistData = await playlistRes.json();
-                    
-                    if(playlistData.items && playlistData.items.length > 0) {
-                        const latestVideoId = playlistData.items[0].snippet.resourceId.videoId;
-                        const latestTitle = playlistData.items[0].snippet.title;
-                        
-                        document.getElementById('latest-title').innerText = latestTitle;
-                        document.getElementById('latest-embed').innerHTML = `
-                            <iframe 
-                                width="100%" 
-                                height="400" 
-                                src="https://www.youtube-nocookie.com/embed/${latestVideoId}" 
-                                title="Latest Video"
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                referrerpolicy="strict-origin-when-cross-origin"
-                                allowfullscreen 
-                                style="border: 4px solid black;">
-                            </iframe>`;
-                        
-                        // 3. Fetch specific stats (Views, Likes, Comments)
-                        const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${latestVideoId}&key=${API_KEY}`;
-                        const videoRes = await fetch(videoUrl);
-                        const videoData = await videoRes.json();
-                        
-                        if(videoData.items && videoData.items.length > 0) {
-                            const vStats = videoData.items[0].statistics;
-                            document.getElementById('latest-views').innerText = `Views: ${Number(vStats.viewCount).toLocaleString()}`;
-                            document.getElementById('latest-comments').innerText = `Comments: ${Number(vStats.commentCount).toLocaleString()}`;
-                            document.getElementById('latest-likes').innerText = `Likes: ${Number(vStats.likeCount).toLocaleString()}`;
+                    if (playlistRes.ok) {
+                        const playlistData = await playlistRes.json();
+                        if(playlistData.items && playlistData.items.length > 0) {
+                            const latestVideoId = playlistData.items[0].snippet.resourceId.videoId;
+                            const latestTitle = playlistData.items[0].snippet.title;
+                            
+                            document.getElementById('latest-title').innerText = latestTitle;
+                            document.getElementById('latest-embed').innerHTML = `
+                                <iframe 
+                                    width="100%" 
+                                    height="400" 
+                                    src="https://www.youtube-nocookie.com/embed/${latestVideoId}" 
+                                    title="Latest Video"
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen 
+                                    style="border: 4px solid black;">
+                                </iframe>`;
+                            
+                            const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${latestVideoId}&key=${API_KEY}`;
+                            const videoRes = await fetch(videoUrl);
+                            if (videoRes.ok) {
+                                const videoData = await videoRes.json();
+                                if(videoData.items && videoData.items.length > 0) {
+                                    const vStats = videoData.items[0].statistics;
+                                    document.getElementById('latest-views').innerText = `Views: ${Number(vStats.viewCount).toLocaleString()}`;
+                                    document.getElementById('latest-comments').innerText = `Comments: ${Number(vStats.commentCount).toLocaleString()}`;
+                                    document.getElementById('latest-likes').innerText = `Likes: ${Number(vStats.likeCount).toLocaleString()}`;
+                                }
+                            }
                         }
                     }
 
-                    // 4. Fetch Top/Latest Channel Playlist
                     const playUrl = `https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=${CHANNEL_ID}&maxResults=1&key=${API_KEY}`;
                     const playRes = await fetch(playUrl);
-                    const playData = await playRes.json();
-
-                    if(playData.items && playData.items.length > 0) {
-                        document.getElementById('playlist-title').innerText = playData.items[0].snippet.title;
-                        document.getElementById('playlist-count').innerText = `Video Count: ${playData.items[0].contentDetails.itemCount}`;
-                    } else {
-                        document.getElementById('playlist-title').innerText = "No Public Playlists Found";
-                        document.getElementById('playlist-count').innerText = "";
+                    if (playRes.ok) {
+                        const playData = await playRes.json();
+                        if(playData.items && playData.items.length > 0) {
+                            document.getElementById('playlist-title').innerText = playData.items[0].snippet.title;
+                            document.getElementById('playlist-count').innerText = `Video Count: ${playData.items[0].contentDetails.itemCount}`;
+                        } else {
+                            document.getElementById('playlist-title').innerText = "No Public Playlists Found";
+                            document.getElementById('playlist-count').innerText = "";
+                        }
                     }
                 }
             } catch (error) {
-                console.error("Fetch Error: ", error);
+                console.error("Fetch Network Error: ", error);
+                document.getElementById('exact-subs').innerText = "NET ERR";
+                document.getElementById('exact-views').innerText = "NET ERR";
+                document.getElementById('exact-videos').innerText = "NET ERR";
             }
         }
 
