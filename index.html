@@ -181,7 +181,7 @@
 
         /* --- CENTER COLUMN (TAB CONTENT) --- */
         .center-col {
-            flex-grow: 1; /* This makes it fill the whole right side now */
+            flex-grow: 1;
             padding: 20px 40px;
             display: flex;
             flex-direction: column;
@@ -407,7 +407,7 @@
         .mascot-btn {
             position: fixed;
             bottom: 20px;
-            right: 40px; /* Moved this slightly to the right now that the sidebar is gone */
+            right: 40px;
             z-index: 1000;
             cursor: pointer;
             transition: transform 0.2s;
@@ -536,6 +536,9 @@
             <button class="nav-link outlined-text" onclick="switchTab('tab-forum')">
                 <span class="nav-text">FORUM</span>
             </button>
+            <button class="nav-link outlined-text" onclick="switchTab('tab-projects')">
+                <span class="nav-text">🛠️ ACTIVE PROJECTS</span>
+            </button>
             <button class="nav-link outlined-text" onclick="switchTab('tab-suggest')">
                 <span class="nav-text">SUGGEST VIDEO</span>
             </button>
@@ -547,7 +550,7 @@
             </button>
         </div>
 
-        <!-- CENTER COLUMN (Right Sidebar is completely removed) -->
+        <!-- CENTER COLUMN -->
         <div class="center-col" id="scrollArea">
             <!-- TAB 1: FORUM -->
             <div id="tab-forum" class="tab-content">
@@ -555,6 +558,28 @@
                 <div class="embed-container">
                   <widgetbot server="1523904437603537047" channel="1543751555335848085" width="100%" height="100%"></widgetbot>
                     <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+                </div>
+            </div>
+
+            <!-- TAB 5: ACTIVE PROJECTS (NEW) -->
+            <div id="tab-projects" class="tab-content" style="justify-content: center;">
+                <div class="panel">
+                    <h2 class="outlined-text" style="font-size: 3em; text-align: center; margin-top: 0;">ACTIVE PROJECTS</h2>
+                    
+                    <div class="video-box" style="text-align: center; margin-bottom: 20px;">
+                        <h3>🎮 ROBLOX GAME #1</h3>
+                        <p style="font-family: 'Arial Black'; font-size: 1.2em; color: white;">Currently writing the Luau scripts. Join the Discord for exclusive sneak peeks and updates.</p>
+                    </div>
+
+                    <div class="video-box" style="text-align: center; margin-bottom: 20px;">
+                        <h3>🎮 ROBLOX GAME #2</h3>
+                        <p style="font-family: 'Arial Black'; font-size: 1.2em; color: white;">In early development. World building and mechanics testing.</p>
+                    </div>
+
+                    <div class="video-box" style="text-align: center;">
+                        <h3>🎬 UPCOMING YOUTUBE VIDEO</h3>
+                        <p style="font-family: 'Arial Black'; font-size: 1.2em; color: white;">Editing in progress. It drops when I feel like it.</p>
+                    </div>
                 </div>
             </div>
 
@@ -640,6 +665,7 @@
             <div class="footer-col">
                 <h4>Navigation</h4>
                 <a href="javascript:void(0);" onclick="switchTab('tab-forum')">Forum Chat</a>
+                <a href="javascript:void(0);" onclick="switchTab('tab-projects')">Active Projects</a>
                 <a href="javascript:void(0);" onclick="switchTab('tab-suggest')">Suggest a Video</a>
                 <a href="javascript:void(0);" onclick="switchTab('tab-analytics')">Channel Analytics</a>
             </div>
@@ -737,7 +763,6 @@
             });
             document.getElementById(tabId).style.display = 'flex';
             
-            // Scroll back up to the top of the content when switching tabs
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
